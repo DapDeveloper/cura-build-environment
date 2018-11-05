@@ -1,12 +1,12 @@
 set(python_patch_command "")
-set(python_configure_command ./configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc)
+set(python_configure_command ./configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-shared --enable-ipv6 --with-threads --without-pymalloc)
 set(python_build_command make)
 set(python_install_command make install)
 
 if(BUILD_OS_OSX)
     # See http://bugs.python.org/issue21381
     # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
-    set(python_patch_command sed -i".bak" "9271,9271d" <SOURCE_DIR>/configure)
+    set(python_patch_command sed -i".bak" "9467,9467d" <SOURCE_DIR>/configure)
     if(CMAKE_OSX_SYSROOT)
         set(python_configure_command ${python_configure_command} --enable-universalsdk=${CMAKE_OSX_SYSROOT})
     else()
@@ -35,8 +35,8 @@ if(BUILD_OS_WINDOWS)
 endif()
 
 ExternalProject_Add(Python
-    URL https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz
-    URL_MD5 3fe8434643a78630c61c6464fe2e7e72
+    URL https://www.python.org/ftp/python/3.6.7/Python-3.6.7.tgz
+    URL_MD5 c83551d83bf015134b4b2249213f3f85
     PATCH_COMMAND ${python_patch_command}
     CONFIGURE_COMMAND "${python_configure_command}"
     BUILD_COMMAND ${python_build_command}
@@ -46,7 +46,7 @@ ExternalProject_Add(Python
 
 # Only build geos on Linux
 if(BUILD_OS_LINUX)
-    SetProjectDependencies(TARGET Python DEPENDS OpenBLAS Geos)
+    SetProjectDependencies(TARGET Python DEPENDS OpenBLAS Geos OpenSSL xz zlib)
 elseif(BUILD_OS_OSX)
     SetProjectDependencies(TARGET Python DEPENDS OpenBLAS Geos OpenSSL xz)
 else()
