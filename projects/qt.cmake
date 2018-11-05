@@ -59,7 +59,7 @@ if(BUILD_OS_OSX)
 elseif(BUILD_OS_WINDOWS)
     list(APPEND qt_options -opengl desktop)
 elseif(BUILD_OS_LINUX)
-    list(APPEND qt_options -no-gtk -no-rpath -qt-xcb)
+    list(APPEND qt_options -pkg-config -no-gtk -no-rpath -qt-xcb -ssl -openssl-linked -I ${CMAKE_INSTALL_PREFIX}/include -L ${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
 if(BUILD_OS_OSX)
