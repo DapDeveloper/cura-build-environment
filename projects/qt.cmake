@@ -59,7 +59,11 @@ if(BUILD_OS_OSX)
 elseif(BUILD_OS_WINDOWS)
     list(APPEND qt_options -opengl desktop)
 elseif(BUILD_OS_LINUX)
-    list(APPEND qt_options -no-gtk -no-rpath -qt-xcb)
+    list(APPEND qt_options -no-gtk -no-rpath -qt-xcb
+         -pkg-config
+         -ssl -openssl-linked
+         -I ${CMAKE_INSTALL_PREFIX}/include
+         -L ${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
 if(BUILD_OS_OSX)
@@ -67,6 +71,14 @@ if(BUILD_OS_OSX)
         URL ${qt_url}
         URL_MD5 ${qt_md5}
         CONFIGURE_COMMAND ${_qt_configure_cmd} ${qt_options}
+        BUILD_IN_SOURCE 1
+        DEPENDS OpenSSL
+    )
+elseif(BUILD_OS_LINUX)
+    ExternalProject_Add(Qt
+        URL ${qt_url}
+        URL_MD5 ${qt_md5}
+        CONFIGURE_COMMAND ./configure ${qt_options}
         BUILD_IN_SOURCE 1
         DEPENDS OpenSSL
     )
