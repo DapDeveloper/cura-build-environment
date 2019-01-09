@@ -1,4 +1,4 @@
-@@ -504,7 +504,7 @@
+@@ -508,7 +508,7 @@
          filesToCopy = []
          magic = imp.get_magic()
          ignorePatterns = shutil.ignore_patterns("*.py", "*.pyc", "*.pyo",
