@@ -53,7 +53,12 @@ set(qt_options
 if(BUILD_OS_OSX)
     list(APPEND qt_options -no-framework)
     if(CURA_OSX_SDK_VERSION)
-        list(APPEND qt_options -sdk macosx${CURA_OSX_SDK_VERSION})
+        list(APPEND qt_options
+             -sdk macosx${CURA_OSX_SDK_VERSION}
+             -system-freetype
+             -I "${CMAKE_INSTALL_PREFIX}/include"
+             -L "${CMAKE_INSTALL_PREFIX}/lib"
+             )
     endif()
     set(_qt_config_cmd ${CMAKE_SOURCE_DIR}/projects/qt-patch-macosx-target.sh && ${_qt_configure_cmd})
 elseif(BUILD_OS_WINDOWS)
@@ -68,7 +73,7 @@ if(BUILD_OS_OSX)
         URL_MD5 ${qt_md5}
         CONFIGURE_COMMAND ${_qt_configure_cmd} ${qt_options}
         BUILD_IN_SOURCE 1
-        DEPENDS OpenSSL
+        DEPENDS OpenSSL Freetype
     )
 else()
     ExternalProject_Add(Qt
